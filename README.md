@@ -2,7 +2,7 @@
 
 Welcome to **Regex AI Assistant**, a powerful tool that helps you generate the most accurate and minimal regular expressions (regex) to extract specific values from text. Powered by an AI model, this app can quickly generate regex patterns for various use cases. You can enter a sample text and the target value you want to extract, and the app will generate the regex pattern to match that value.
 
-![alt text](gif.gif)
+![alt text](animation.gif)
 
 ## Features
 
