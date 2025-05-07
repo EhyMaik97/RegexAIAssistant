@@ -61,6 +61,7 @@ GROQ_API_KEY=your_api_key_here
 You can run the app as a web-based Streamlit application:
 
 ```bash
+cd app/
 streamlit run main.py
 ```
 This will open the app in your browser at http://localhost:8501, where you can start using the Regex AI Assistant.
