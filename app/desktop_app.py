@@ -1,10 +1,26 @@
 import sys
+import os
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                              QHBoxLayout, QLabel, QTextEdit, QPushButton, 
                              QLineEdit, QMessageBox, QSplitter, QFrame,
-                             QGraphicsDropShadowEffect)
+                             QGraphicsDropShadowEffect, QToolButton)
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QFont, QIcon, QColor
+from PyQt5.QtGui import QFont, QIcon, QColor, QPalette
+
+# Add support for PyInstaller packaged app
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, relative_path)
+
+# Import chains only after setting up resource path
+# This prevents import errors when running as executable
+sys.path.insert(0, resource_path("app"))
 from chains import Chain
 
 class RegexGeneratorThread(QThread):
