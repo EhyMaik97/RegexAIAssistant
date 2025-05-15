@@ -15,16 +15,9 @@ def build_exe():
         print("PyInstaller not found. Installing...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "pyinstaller"])
     
-    # Ensure required dependencies are installed
-    dependencies = ["langchain-groq", "python-dotenv", "langchain-core", "PyQt5"]
-    for dep in dependencies:
-        try:
-            module_name = dep.replace("-", "_")
-            __import__(module_name)
-            print(f"Found {dep}")
-        except ImportError:
-            print(f"Installing {dep}...")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", dep])
+    # Install all dependencies from requirements.txt
+    print("Installing dependencies from requirements.txt...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
     
     # Clean previous builds if they exist
     if os.path.exists("dist"):
@@ -56,7 +49,22 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[('app/chains.py', 'app'), ('app/template.txt', 'app'), ('.env', '.')],
-    hiddenimports=['langchain_groq', 'langchain_core', 'python_dotenv', 'dotenv', 'PyQt5', 'PyQt5.QtCore', 'PyQt5.QtGui', 'PyQt5.QtWidgets'],
+    hiddenimports=[
+        'langchain_groq', 
+        'langchain_core', 
+        'python_dotenv',
+        'dotenv',
+        'PyQt5',
+        'PyQt5.QtCore',
+        'PyQt5.QtGui',
+        'PyQt5.QtWidgets',
+        'groq',
+        'pydantic',
+        'typing_extensions',
+        'PIL',
+        'langchain_core.prompts',
+        'langchain_core.language_models',
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -69,14 +77,26 @@ a = Analysis(
 
 # Add all dependencies from requirements.txt
 import pkg_resources
-for pkg in ['langchain-groq', 'langchain-core', 'python-dotenv', 'PyQt5']:
-    try:
-        reqs = pkg_resources.get_distribution(pkg).requires()
-        if reqs:
-            for req in reqs:
-                a.hiddenimports.append(req.name)
-    except:
-        pass
+try:
+    # Read requirements file
+    with open('requirements.txt', 'r') as req_file:
+        for line in req_file:
+            line = line.strip()
+            if line and not line.startswith('#'):
+                # Extract package name
+                pkg_name = line.split('==')[0].split('>=')[0].strip()
+                try:
+                    # Add the package
+                    a.hiddenimports.append(pkg_name.replace('-', '_'))
+                    # Add its dependencies
+                    reqs = pkg_resources.get_distribution(pkg_name).requires()
+                    if reqs:
+                        for req in reqs:
+                            a.hiddenimports.append(req.name.replace('-', '_'))
+                except:
+                    pass
+except Exception as e:
+    print(f"Error processing requirements: {e}")
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
