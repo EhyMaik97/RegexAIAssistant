@@ -31,7 +31,7 @@ A desktop application that uses AI to generate regex patterns from sample text a
    - Mac/Linux: `source venv/bin/activate`
 4. Install requirements: `pip install -r requirements.txt`
 5. Create a `.env` file in the project root with: `GROQ_API_KEY=your_api_key_here`
-6. Run the application: `python app/desktop_app.py`
+6. Run the application: `python app/app.py`
 
 ## Building from Source
 

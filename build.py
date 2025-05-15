@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 import shutil
+import pkg_resources
 
 def build_exe():
     print("Building executable file for Regex AI Assistant...")
@@ -15,10 +16,11 @@ def build_exe():
         subprocess.check_call([sys.executable, "-m", "pip", "install", "pyinstaller"])
     
     # Ensure required dependencies are installed
-    dependencies = ["langchain-groq", "python-dotenv"]
+    dependencies = ["langchain-groq", "python-dotenv", "langchain-core", "PyQt5"]
     for dep in dependencies:
         try:
-            __import__(dep.replace("-", "_"))
+            module_name = dep.replace("-", "_")
+            __import__(module_name)
             print(f"Found {dep}")
         except ImportError:
             print(f"Installing {dep}...")
@@ -30,6 +32,8 @@ def build_exe():
         shutil.rmtree("dist", ignore_errors=True)
     if os.path.exists("build"):
         shutil.rmtree("build", ignore_errors=True)
+    if os.path.exists("RegexAIAssistant.spec"):
+        os.remove("RegexAIAssistant.spec")
     
     # Check if .env file exists, create if not
     if not os.path.exists(".env"):
@@ -38,25 +42,74 @@ def build_exe():
             f.write("GROQ_API_KEY=your_api_key_here\n")
         print("Please edit .env file and add your actual GROQ API key before running the application")
     
-    # Create spec file and build the executable
-    print("Creating executable...")
+    # Create a custom .spec file for PyInstaller
+    spec_content = """
+# -*- mode: python ; coding: utf-8 -*-
+
+import sys
+import os
+
+block_cipher = None
+
+a = Analysis(
+    ['app/app.py'],
+    pathex=[],
+    binaries=[],
+    datas=[('app/chains.py', 'app'), ('app/template.txt', 'app'), ('.env', '.')],
+    hiddenimports=['langchain_groq', 'langchain_core', 'python_dotenv', 'dotenv', 'PyQt5', 'PyQt5.QtCore', 'PyQt5.QtGui', 'PyQt5.QtWidgets'],
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=[],
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    cipher=block_cipher,
+    noarchive=False,
+)
+
+# Add all dependencies from requirements.txt
+import pkg_resources
+for pkg in ['langchain-groq', 'langchain-core', 'python-dotenv', 'PyQt5']:
+    try:
+        reqs = pkg_resources.get_distribution(pkg).requires()
+        if reqs:
+            for req in reqs:
+                a.hiddenimports.append(req.name)
+    except:
+        pass
+
+pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    [],
+    name='RegexAIAssistant',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    runtime_tmpdir=None,
+    console=False,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+)
+"""
     
-    # Determine the correct separator for --add-data based on platform
-    separator = ";" if sys.platform.startswith("win") else ":"
+    # Write the spec file
+    with open("RegexAIAssistant.spec", "w") as spec_file:
+        spec_file.write(spec_content)
     
-    cmd = [
-        "pyinstaller",
-        "--name=RegexAIAssistant",
-        "--noconsole",  # No console window
-        "--onefile",    # Single file executable
-        f"--add-data=app/chains.py{separator}app",  # Include the chains module
-        f"--add-data=app/template.txt{separator}app",  # Include the template file
-        f"--add-data=.env{separator}.",  # Include the .env file
-        "--icon=NONE",  # Replace with your icon if you have one
-        "app/app.py"
-    ]
-    
-    subprocess.call(cmd)
+    # Build using the spec file
+    print("Building the executable...")
+    subprocess.call(["pyinstaller", "RegexAIAssistant.spec"])
     
     print("\nBuild complete!")
     print("Executable created at: dist/RegexAIAssistant.exe")
