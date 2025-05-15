@@ -3,9 +3,9 @@ import os
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                              QHBoxLayout, QLabel, QTextEdit, QPushButton, 
                              QLineEdit, QMessageBox, QSplitter, QFrame,
-                             QGraphicsDropShadowEffect)
+                             QGraphicsDropShadowEffect, QToolButton)
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QFont, QIcon, QColor
+from PyQt5.QtGui import QFont, QIcon, QColor, QPalette
 from dotenv import load_dotenv, find_dotenv, set_key
 
 # Add support for PyInstaller packaged app
@@ -69,8 +69,16 @@ class RegexGenerator(QMainWindow):
         super().__init__()
         self.chain = None
         self.apply_dark_theme()
+        self.set_application_icon()
         self.init_ui()
         self.check_api_key()
+        
+    def set_application_icon(self):
+        """Set the application icon from assets folder"""
+        icon_path = resource_path(os.path.join("assets", "app_icon.ico"))
+        if os.path.exists(icon_path):
+            app_icon = QIcon(icon_path)
+            self.setWindowIcon(app_icon)
         
     def check_api_key(self):
         """Check if API key is set and prompt user if not"""
@@ -358,6 +366,13 @@ class RegexGenerator(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
+    
+    # Set application icon
+    icon_path = resource_path(os.path.join("assets", "app_icon.ico"))
+    if os.path.exists(icon_path):
+        app_icon = QIcon(icon_path)
+        app.setWindowIcon(app_icon)
+    
     window = RegexGenerator()
     window.show()
     sys.exit(app.exec_())

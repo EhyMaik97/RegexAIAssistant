@@ -35,6 +35,37 @@ def build_exe():
             f.write("GROQ_API_KEY=your_api_key_here\n")
         print("Please edit .env file and add your actual GROQ API key before running the application")
     
+    # Check if icon directory exists, create if not
+    if not os.path.exists("assets"):
+        os.makedirs("assets")
+    
+    # Check if icon file exists, create a default one if not
+    icon_path = "assets/app_icon.ico"
+    if not os.path.exists(icon_path):
+        print("Creating a default icon file...")
+        try:
+            from PIL import Image, ImageDraw
+            
+            # Create a simple icon
+            img = Image.new('RGBA', (256, 256), color=(0, 0, 0, 0))
+            d = ImageDraw.Draw(img)
+            
+            # Draw a blue circle
+            d.ellipse((20, 20, 236, 236), fill=(0, 120, 215))
+            
+            # Draw an "R" in white
+            d.rectangle((80, 70, 180, 190), fill=(255, 255, 255))
+            d.rectangle((100, 100, 170, 160), fill=(0, 120, 215))
+            d.polygon([(170, 70), (180, 70), (180, 190), (140, 190), (140, 170), (160, 170), (160, 90), (130, 90), (130, 130), (150, 130), (150, 110), (170, 110)], fill=(0, 120, 215))
+            
+            # Save as .ico format
+            img.save(icon_path)
+            print(f"Default icon created at {icon_path}")
+        except Exception as e:
+            print(f"Failed to create default icon: {e}")
+            print("You can add your own icon file at 'assets/app_icon.ico'")
+            icon_path = None
+    
     # Create a custom .spec file for PyInstaller
     spec_content = """
 # -*- mode: python ; coding: utf-8 -*-
@@ -48,7 +79,7 @@ a = Analysis(
     ['app/app.py'],
     pathex=[],
     binaries=[],
-    datas=[('app/chains.py', 'app'), ('app/template.txt', 'app'), ('.env', '.')],
+    datas=[('app/chains.py', 'app'), ('app/template.txt', 'app'), ('.env', '.'), ('assets', 'assets')],
     hiddenimports=[
         'langchain_groq', 
         'langchain_core', 
@@ -119,9 +150,13 @@ exe = EXE(
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
-    entitlements_file=None,
-)
-"""
+    entitlements_file=None,"""
+    
+    # Add icon if available
+    if icon_path and os.path.exists(icon_path):
+        spec_content += f",\n    icon='{icon_path}'"
+    
+    spec_content += "\n)"
     
     # Write the spec file
     with open("RegexAIAssistant.spec", "w") as spec_file:
