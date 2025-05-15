@@ -7,45 +7,25 @@ load_dotenv()
 
 class Chain:
     def __init__(self):
+        """
+        Initialize the Chain class with the LLM and the template.
+        """
         self.llm = ChatGroq(temperature=0, groq_api_key=os.getenv("GROQ_API_KEY"), model_name="llama-3.3-70b-versatile")
-
-    def write_regex(self, sample_text, target_value):
+        with open("template.txt") as f: 
+            self.template = f.read()
+            
+    def write_regex(self, sample_text: str, target_value: str) -> str:
+        """
+        Write a regex pattern that extracts the target value from the sample text.
+        """
         prompt_regex = PromptTemplate.from_template(
-            """
-            ### INSTRUCTION:
-            You are a highly skilled regular expression (regex) expert.
-            Your task is to generate the most accurate and minimal regex pattern 
-            that extracts a specific value from a given input text.
-
-            The input will include:
-            - A sample text (realistic, natural language or structured)
-            - A specific target value that appears somewhere in that text
-
-            Your job is to:
-            1. Analyze the context and structure of the input text.
-            2. Identify the target value within it.
-            3. Generate a regex pattern that matches only the value (e.g., "value_123_example") **exactly**, 
-            excluding any key names or extra characters (such as `key1=`).
-            4. Return only the regex pattern NOT THE VALUE ALREADY CALUCALTED (without code or explanation).
-
-            Ensure that the regex captures the value inside the quotes and does not include the field name (e.g., `subtype=`).
-
-            ### NO PREAMBLE AND NO backtick:
-
-            [text]
-            {sample_text}
-
-            [value]
-            {target_value}
-
-            [regex]
-            """
+            self.template
         )
 
         chain_regex = prompt_regex | self.llm
         res = chain_regex.invoke({
-            "sample_text": str(sample_text),
-            "target_value": str(target_value)
+            "sample_text": sample_text,
+            "target_value": target_value
         })
         return res.content.strip()
 

@@ -3,6 +3,9 @@ from chains import Chain
 
 
 def create_streamlit_app(llm):
+    """
+    Create a Streamlit app that allows the user to input a sample text and a value, and then generate a regex pattern that matches the value exactly.
+    """
     st.title("🤖 Regex AI Assistant")
     st.markdown("Enter a sample text and a value you want to extract. The AI will generate a regex that matches the value exactly.")
     
