@@ -6,6 +6,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Chain:
+    """
+    A class that contains the logic for the regex generation chain.
+    """
+    
     def __init__(self):
         """
         Initialize the Chain class with the LLM and the template.
@@ -13,6 +17,7 @@ class Chain:
         self.llm = ChatGroq(temperature=0, groq_api_key=os.getenv("GROQ_API_KEY"), model_name="llama-3.3-70b-versatile")
         with open("template.txt") as f: 
             self.template = f.read()
+            
             
     def write_regex(self, sample_text: str, target_value: str) -> str:
         """
