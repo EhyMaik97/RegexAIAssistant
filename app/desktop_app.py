@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                              QGraphicsDropShadowEffect, QToolButton)
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QFont, QIcon, QColor, QPalette
+from dotenv import load_dotenv, find_dotenv, set_key
 
 # Add support for PyInstaller packaged app
 def resource_path(relative_path):
@@ -66,9 +67,55 @@ class RegexGenerator(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        self.chain = Chain()
+        self.chain = None
         self.apply_dark_theme()
         self.init_ui()
+        self.check_api_key()
+        
+    def check_api_key(self):
+        """Check if API key is set and prompt user if not"""
+        # Try loading from .env again just to be sure
+        dotenv_path = find_dotenv(usecwd=True)
+        load_dotenv(dotenv_path)
+        
+        api_key = os.getenv("GROQ_API_KEY")
+        if not api_key or api_key == "your_api_key_here":
+            self.status_label.setText("API Key not found")
+            
+            dialog = QMessageBox(self)
+            dialog.setWindowTitle("API Key Required")
+            dialog.setText("GROQ API Key is required to generate regex patterns.")
+            dialog.setInformativeText("Please enter your GROQ API Key:")
+            
+            # Add input field
+            text_input = QLineEdit(dialog)
+            text_input.setEchoMode(QLineEdit.Password)
+            text_input.setMinimumWidth(300)
+            
+            # Add layout for better appearance
+            layout = dialog.layout()
+            if layout is not None:
+                layout.addWidget(text_input, 1, 0, 1, layout.columnCount())
+            
+            dialog.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            result = dialog.exec_()
+            
+            if result == QMessageBox.Ok:
+                new_api_key = text_input.text().strip()
+                if new_api_key:
+                    # Save to .env file if it exists
+                    if dotenv_path:
+                        set_key(dotenv_path, "GROQ_API_KEY", new_api_key)
+                    # Also set in environment
+                    os.environ["GROQ_API_KEY"] = new_api_key
+                    self.status_label.setText("API Key saved")
+                    self.chain = Chain()
+                else:
+                    QMessageBox.warning(self, "No API Key", "No API key was provided. The application may not function correctly.")
+            else:
+                QMessageBox.warning(self, "No API Key", "No API key was provided. The application may not function correctly.")
+        else:
+            self.chain = Chain()
         
     def apply_dark_theme(self):
         """Apply dark theme to the application"""
@@ -249,6 +296,13 @@ class RegexGenerator(QMainWindow):
         
     def generate_regex(self):
         """Handle the generation of regex patterns"""
+        # Check if chain is available
+        if self.chain is None:
+            QMessageBox.critical(self, "API Key Missing", 
+                               "Cannot generate regex pattern without a valid API key. Please restart the application and provide a valid API key.")
+            self.check_api_key()
+            return
+            
         sample_text = self.sample_text_edit.toPlainText().strip()
         target_value = self.target_value_edit.text().strip()
         

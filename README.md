@@ -1,69 +1,56 @@
-# Regex AI Assistant
+# AI Regex Generator
 
-Welcome to **Regex AI Assistant**, a powerful tool that helps you generate the most accurate and minimal regular expressions (regex) to extract specific values from text. Powered by an AI model, this app can quickly generate regex patterns for various use cases. You can enter a sample text and the target value you want to extract, and the app will generate the regex pattern to match that value.
-
-![alt text](animation.gif)
+A desktop application that uses AI to generate regex patterns from sample text and target values.
 
 ## Features
 
-- **Input Text**: Enter a sample text (can be natural language or structured data like logs).
-- **Target Value**: Provide the target value you want to extract (e.g., "example_value" from `example_key="example_value"`).
-- **Generate Regex**: Get the most accurate and minimal regex pattern to extract the value from the text.
-- **Copy Regex**: Easily copy the generated regex pattern with a click.
+- Modern, dark-themed UI
+- AI-powered regex pattern generation
+- Simple copy-paste functionality
+- Cross-platform compatibility
 
-## AI Technology
+## Requirements
 
-This application uses **[GroqCloud](https://console.groq.com/home)** as the backend language model provider. It offers ultra-low-latency inference for large language models, making the user experience fast and responsive.
-
-The specific model used is **[LLaMA 3.1 70B Versatile](https://console.groq.com/docs/model/llama-3.3-70b-versatile)** by Meta, known for its strong natural language understanding and generation capabilities. This model is particularly well-suited for tasks like pattern recognition and text extraction, making it ideal for generating precise regular expressions.
-
+- A GROQ API key (sign up at [groq.com](https://console.groq.com))
 
 ## Installation
 
-To get started with **Regex AI Assistant**, follow these installation steps based on your operating system.
+### Option 1: Executable (Windows)
 
-### Prerequisites
+1. Download the latest `RegexAIAssistant.exe` from the releases section
+2. Run the executable
+3. When prompted, enter your GROQ API key
+4. The application will save your API key for future use
 
-- Python 3.7+
-- A working GroqCloud API key
+### Option 2: Run from source code
 
-### 1. Clone the Repository
+1. Clone this repository
+2. Create a virtual environment: `python -m venv venv`
+3. Activate the virtual environment:
+   - Windows: `venv\Scripts\activate`
+   - Mac/Linux: `source venv/bin/activate`
+4. Install requirements: `pip install -r requirements.txt`
+5. Create a `.env` file in the project root with: `GROQ_API_KEY=your_api_key_here`
+6. Run the application: `python app/desktop_app.py`
 
-```bash
-git clone https://github.com/EhyMaik97/regex-ai-assistant.git
-cd regex-ai-assistant
-```
+## Building from Source
 
-### 2. Set Up the Environment
+To build the executable from source:
 
-Create and activate a Python virtual environment (optional but recommended):
+1. Make sure you have all requirements installed
+2. Run the build script: `python build.py`
+3. The executable will be created in the `dist` directory
 
-```bash
-python3 -m venv venv
-source venv/bin/activate  # For Windows, use `venv\Scripts\activate`
-```
+## Usage
 
-Install the required dependencies:
+1. Enter sample text containing the value you want to extract
+2. Enter the exact target value that should be matched
+3. Click "Generate Regex" to create a regex pattern
+4. Copy the generated pattern to use in your code or tools
 
-```bash
-pip install -r requirements.txt
-```
+## Technical Details
 
-### 3. Set Up Environment Variables
-Create a `.env` file in the /app directory and add your GroqCloud API key:
-
-```bash
-GROQ_API_KEY=your_api_key_here
-```
-
-### 4. Running the Streamlit App
-
-You can run the app as a web-based Streamlit application:
-
-```bash
-streamlit run main.py
-```
-This will open the app in your browser at http://localhost:8501, where you can start using the Regex AI Assistant.
-
-## 
+- Built with PyQt5 for the user interface
+- Uses LangChain with Groq's LLM API for AI reasoning
+- Packaged with PyInstaller for distribution
 
