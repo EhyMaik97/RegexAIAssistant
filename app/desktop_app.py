@@ -170,45 +170,7 @@ class RegexGenerator(QMainWindow):
         self.copy_button.setEnabled(False)
 
 def main():
-    # Set platform to offscreen if in WSL
-    if "WSL" in os.uname().release or "microsoft" in os.uname().release.lower():
-        print("WSL detected, using offscreen platform")
-        os.environ["QT_QPA_PLATFORM"] = "offscreen"
-        print("Note: In WSL, the GUI will not be visible.")
-        print("This app would normally show a GUI window, but is running in headless mode due to WSL limitations.")
-        print("To use the full GUI, please run this application directly in Windows with Python and PyQt installed.")
         
-        # Create a simple CLI interface for WSL users
-        chain = Chain()
-        print("\n=== AI Regex Generator (CLI Mode) ===")
-        while True:
-            try:
-                print("\nEnter sample text (or 'quit' to exit):")
-                sample_text = input("> ")
-                if sample_text.lower() == 'quit':
-                    break
-                    
-                print("Enter target value to extract:")
-                target_value = input("> ")
-                
-                if target_value not in sample_text:
-                    print("Error: Target value not found in sample text.")
-                    continue
-                    
-                print("Generating regex pattern...")
-                result = chain.write_regex(sample_text, target_value)
-                print("\nGenerated Pattern:")
-                print(result)
-                
-            except KeyboardInterrupt:
-                print("\nExiting...")
-                break
-            except Exception as e:
-                print(f"Error: {str(e)}")
-        
-        return
-    
-    # Normal GUI mode for non-WSL environments
     app = QApplication(sys.argv)
     window = RegexGenerator()
     window.show()
