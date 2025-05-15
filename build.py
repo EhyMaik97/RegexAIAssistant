@@ -66,7 +66,7 @@ def build_exe():
             print("You can add your own icon file at 'assets/app_icon.ico'")
             icon_path = None
     
-    # Create a custom .spec file for PyInstaller
+    # Create a custom .spec file for PyInstaller with fixed formatting
     spec_content = """
 # -*- mode: python ; coding: utf-8 -*-
 
@@ -150,9 +150,9 @@ exe = EXE(
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
-    entitlements_file=None,"""
+    entitlements_file=None"""
     
-    # Add icon if available
+    # Add icon if available - with no trailing comma
     if icon_path and os.path.exists(icon_path):
         spec_content += f",\n    icon='{icon_path}'"
     
