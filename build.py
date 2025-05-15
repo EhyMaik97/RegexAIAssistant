@@ -2,7 +2,6 @@ import os
 import sys
 import subprocess
 import shutil
-import pkg_resources
 
 def build_exe():
     print("Building executable file for Regex AI Assistant...")
