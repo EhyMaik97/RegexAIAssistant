@@ -3,3 +3,10 @@ python-dotenv==1.0.0
 langchain-groq==0.1.4
 langchain-core==0.1.31
 pyinstaller==6.13.0
+# Additional dependencies that might be needed
+groq>=0.4.0
+# langchain dependencies
+pydantic>=2.0.0
+typing-extensions>=4.0.0
+# For adding icons to buttons
+pillow>=10.0.0
