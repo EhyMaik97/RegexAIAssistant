@@ -5,6 +5,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+MODEL_NAME = "llama-3.3-70b-versatile"
+TEMPERATURE = 0
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+TEMPLATE_FILE = "template.txt"
+
 class Chain:
     """
     A class that contains the logic for the regex generation chain.
@@ -14,8 +19,8 @@ class Chain:
         """
         Initialize the Chain class with the LLM and the template.
         """
-        self.llm = ChatGroq(temperature=0, groq_api_key=os.getenv("GROQ_API_KEY"), model_name="llama-3.3-70b-versatile")
-        with open("template.txt") as f: 
+        self.llm = ChatGroq(temperature=TEMPERATURE, groq_api_key=GROQ_API_KEY, model_name=MODEL_NAME)
+        with open(TEMPLATE_FILE) as f: 
             self.template = f.read()
             
             
@@ -35,4 +40,4 @@ class Chain:
         return res.content.strip()
 
 if __name__ == "__main__":
-    print(os.getenv("GROQ_API_KEY"))
+    print(GROQ_API_KEY)
