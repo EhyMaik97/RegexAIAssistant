@@ -53,7 +53,7 @@ def build_exe():
         f"--add-data=app/template.txt{separator}app",  # Include the template file
         f"--add-data=.env{separator}.",  # Include the .env file
         "--icon=NONE",  # Replace with your icon if you have one
-        "app/desktop_app.py"
+        "app/app.py"
     ]
     
     subprocess.call(cmd)
