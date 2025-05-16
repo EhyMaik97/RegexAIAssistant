@@ -12,14 +12,12 @@ A powerful desktop application that uses AI to generate regular expressions base
 - 🔒 Secure API key management
 
 ## Requirements
-- Windows 10/11, macOS 10.15+, or Linux
+- Windows 10/11
 - GROQ API key (required for AI functionality)
 
 ## Installation
 1. Download the appropriate file for your platform:
    - Windows: `RegexAIAssistant.exe`
-   - macOS: `RegexAIAssistant.app`
-   - Linux: `RegexAIAssistant`
 2. Run the application
 3. Enter your GROQ API key when prompted
 
@@ -28,58 +26,6 @@ A powerful desktop application that uses AI to generate regular expressions base
 2. Specify the target value you want to extract
 3. Click "Generate Regex" to create the pattern
 4. Use "Copy to Clipboard" to copy the generated regex
-
-## Example Use Cases
-
-### 1. Email Address Extraction
-```
-Sample Text:
-Contact us at support@example.com or sales@company.org for assistance.
-You can also reach us at info@test.net
-
-Target Value:
-support@example.com
-```
-
-### 2. Phone Number Extraction
-```
-Sample Text:
-Call us at (555) 123-4567 or +1-555-987-6543
-Our support line is 555.888.9999
-
-Target Value:
-(555) 123-4567
-```
-
-### 3. Date Extraction
-```
-Sample Text:
-The meeting is scheduled for 2024-03-15 and the deadline is 2024/04/20
-Please submit by 03-15-2024
-
-Target Value:
-2024-03-15
-```
-
-### 4. URL Extraction
-```
-Sample Text:
-Visit our website at https://www.example.com/products
-Or check https://blog.example.org for updates
-
-Target Value:
-https://www.example.com/products
-```
-
-### 5. Credit Card Number (Last 4 digits)
-```
-Sample Text:
-Your card ending in 1234 was charged $50.00
-Transaction on card ****-****-****-5678 completed
-
-Target Value:
-1234
-```
 
 ## First Run
 On first launch, you'll be prompted to enter your GROQ API key. This key is required for the AI functionality and is stored securely in a local .env file.
