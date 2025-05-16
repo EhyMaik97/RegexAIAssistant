@@ -1,125 +1,127 @@
-# AI Regex Generator
+# Regex AI Assistant
 
-A modern desktop application that leverages AI to generate optimal regular expression patterns from sample text, powered by Groq's LLM API.
+A powerful desktop application that uses AI to generate regular expressions based on sample text and target values.
 
-![Regex AI Assistant](assets/app_icon.png)
+![Regex AI Assistant Demo](demo.gif)
 
 ## Features
-
-- **Modern Dark-themed UI**: Sleek, contemporary interface with dark mode
-- **AI-powered Regex Generation**: Uses Groq's LLaMA 3.3 70B model to create precise regex patterns
-- **User-friendly Experience**: Simple input of sample text and target value
-- **Real-time Processing**: Asynchronous processing to keep the UI responsive
-- **Cross-platform**: Works on Windows, macOS, and Linux
+- 🤖 AI-powered regex pattern generation
+- 🎯 Extract specific values from text using natural language
+- 💻 Modern, dark-themed user interface
+- 📋 One-click copy to clipboard
+- 🔒 Secure API key management
 
 ## Requirements
-
-- A Groq API key (sign up at [console.groq.com](https://console.groq.com))
+- Windows 10/11, macOS 10.15+, or Linux
+- GROQ API key (required for AI functionality)
 
 ## Installation
+1. Download the appropriate file for your platform:
+   - Windows: `RegexAIAssistant.exe`
+   - macOS: `RegexAIAssistant.app`
+   - Linux: `RegexAIAssistant`
+2. Run the application
+3. Enter your GROQ API key when prompted
 
-### Windows Executable
+## How to Use
+1. Enter your sample text in the "Sample Text" field
+2. Specify the target value you want to extract
+3. Click "Generate Regex" to create the pattern
+4. Use "Copy to Clipboard" to copy the generated regex
 
-1. Download the latest `RegexAIAssistant.exe` from the [Releases](../../releases) section
-2. Run the executable
-3. When prompted, enter your Groq API key
-4. The application will save your API key for future use
+## Example Use Cases
 
-### From Source Code
+### 1. Email Address Extraction
+```
+Sample Text:
+Contact us at support@example.com or sales@company.org for assistance.
+You can also reach us at info@test.net
 
-1. Clone this repository:
-   ```
-   git clone <repository-url>
-   cd regex-ai-assistant
-   ```
+Target Value:
+support@example.com
+```
 
-2. Create and activate a virtual environment:
-   ```
-   # Windows
-   python -m venv venv
-   venv\Scripts\activate
+### 2. Phone Number Extraction
+```
+Sample Text:
+Call us at (555) 123-4567 or +1-555-987-6543
+Our support line is 555.888.9999
 
-   # macOS/Linux
-   python -m venv venv
-   source venv/bin/activate
-   ```
+Target Value:
+(555) 123-4567
+```
 
-3. Install dependencies:
-   ```
+### 3. Date Extraction
+```
+Sample Text:
+The meeting is scheduled for 2024-03-15 and the deadline is 2024/04/20
+Please submit by 03-15-2024
+
+Target Value:
+2024-03-15
+```
+
+### 4. URL Extraction
+```
+Sample Text:
+Visit our website at https://www.example.com/products
+Or check https://blog.example.org for updates
+
+Target Value:
+https://www.example.com/products
+```
+
+### 5. Credit Card Number (Last 4 digits)
+```
+Sample Text:
+Your card ending in 1234 was charged $50.00
+Transaction on card ****-****-****-5678 completed
+
+Target Value:
+1234
+```
+
+## First Run
+On first launch, you'll be prompted to enter your GROQ API key. This key is required for the AI functionality and is stored securely in a local .env file.
+
+## Notes
+- The application is completely self-contained - no Python installation required
+- All dependencies are bundled with the executable
+- Your API key is stored locally and never shared
+
+## Development
+If you want to build from source:
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
    pip install -r requirements.txt
    ```
-
-4. Create a `.env` file in the project root with your Groq API key:
-   ```
-   GROQ_API_KEY=your_api_key_here
-   ```
-
-5. Run the application:
-   ```
+3. Run the application:
+   ```bash
    python app/app.py
    ```
 
-## Building from Source
+## Building Executables
+To build executables for different platforms:
 
-To create your own executable:
+```bash
+# Windows
+pyinstaller regex_assistant.spec --clean
 
-1. Install all dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+# macOS
+pyinstaller regex_assistant_mac.spec --clean
 
-2. Run the build script:
-   ```
-   python build.py
-   ```
-
-3. The executable will be created in the `dist` directory
-
-## Usage Guide
-
-1. **Enter Sample Text**: Paste or type the text containing the value you want to extract
-2. **Target Value**: Enter the specific value you want to match with regex
-3. **Generate**: Click the "Generate Regex" button to create the optimal pattern
-4. **Copy**: Use the "Copy to Clipboard" button to copy the generated regex
-5. **Clear**: Reset all fields with the "Clear All" button
-
-## How It Works
-
-The application uses:
-- **PyQt5** for the user interface
-- **LangChain** with **Groq's API** for AI-powered regex generation
-- **Prompt Engineering** to guide the AI in creating optimal regex patterns
-- **Threading** to keep the UI responsive during API calls
-
-## Technical Architecture
-
-```
-├── app/
-│   ├── app.py          # Main application code 
-│   ├── chains.py       # LangChain integration
-│   └── template.txt    # Prompt template
-├── assets/             # Icons and assets
-├── build.py            # Script to build the executable
-└── requirements.txt    # Project dependencies
+# Linux
+pyinstaller regex_assistant_linux.spec --clean
 ```
 
-## Troubleshooting
-
-- **API Key Issues**: If you encounter API authentication errors, check your Groq API key in the .env file
-- **Missing Dependencies**: Run `pip install -r requirements.txt` to ensure all packages are installed
-- **Executable Errors**: Try running from source if the executable has issues
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+## Support
+If you encounter any issues or have questions, please open an issue on the GitHub repository.
 
 ## License
-
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Credits
-
-- UI design inspired by modern code editors
-- Regex generation powered by [Groq](https://groq.com)'s LLaMA 3.3 70B model
-- Built with [PyQt5](https://www.riverbankcomputing.com/software/pyqt/) and [LangChain](https://www.langchain.com)
+---
+*Built with Python, PyQt5, and GROQ AI*
 
