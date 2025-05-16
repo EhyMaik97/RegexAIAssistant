@@ -1,11 +1,16 @@
 import sys
 import os
+import warnings
+
+# Suppress specific PyQt5 SIP deprecation warning
+warnings.filterwarnings("ignore", category=DeprecationWarning, message="sipPyTypeDict")
+
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                              QHBoxLayout, QLabel, QTextEdit, QPushButton, 
                              QLineEdit, QMessageBox, QSplitter, QFrame,
-                             QGraphicsDropShadowEffect, QToolButton)
+                             QGraphicsDropShadowEffect)
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QFont, QIcon, QColor, QPalette
+from PyQt5.QtGui import QFont, QIcon, QColor
 from dotenv import load_dotenv, find_dotenv, set_key
 
 # Add support for PyInstaller packaged app
