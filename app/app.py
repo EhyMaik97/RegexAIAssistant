@@ -2,8 +2,6 @@ import sys
 import os
 import warnings
 
-# Suppress specific PyQt5 SIP deprecation warning
-warnings.filterwarnings("ignore", category=DeprecationWarning, message="sipPyTypeDict")
 
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                              QHBoxLayout, QLabel, QTextEdit, QPushButton, 

@@ -1,4 +1,4 @@
-PyQt5==5.15.9
+PyQt5==5.15.10
 python-dotenv==1.0.0
 langchain-groq==0.1.4
 langchain-core>=0.1.45,<0.3
